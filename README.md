@@ -8,7 +8,7 @@ The library provides simple template-based wrappers around libsndfile, allowing 
 
 - **Type mapping:** Maps C++ sample types to libsndfile subtypes.
 - **Audio writing:** Write audio samples to files using `SoundFileWriter`.
-- **Audio reading:** Read audio samples from files using `SoundFileReader`.
+- **Audio reading:** Read audio samples from files using `sound_file_reader`.
 - **Multiple sample types:** Supports `float`, `double`, and `int`.
 - **Configurable formats:** Specify the audio container format and integer PCM subtype at compile time.
 - **Multichannel audio:** Supports interleaved audio samples for mono, stereo, and other channel configurations.
@@ -29,8 +29,8 @@ Example project structure:
 your_project/
 ├── include/
 │   ├── sndfile_utils.hpp
-│   ├── SoundFileWriter.hpp
-│   └── SoundFileReader.hpp
+│   ├── sound_file_writer.hpp
+│   └── sound_file_reader.hpp
 └── main.cpp
 ```
 
@@ -56,8 +56,7 @@ target_link_libraries(my_app PRIVATE sndfile_wrapper)
 The `type_to_sf_type<T, IntType>()` function maps a C++ sample type to its corresponding libsndfile subtype.
 
 ```cpp
-#include <sndfile_utils.hpp>
-#include <sndfile.h>
+#include <sndfile_wrapper/sndfile_utils.hpp>
 
 int float_type = type_to_sf_type<float>();
 // SF_FORMAT_FLOAT
@@ -106,8 +105,7 @@ The `IntType` template parameter is passed to `type_to_sf_type`. For `int`, choo
 
 ```cpp
 #include <array>
-#include <sndfile.h>
-#include <SoundFileWriter.hpp>
+#include <sndfile_wrapper/sound_file_writer.hpp>
 
 int main() {
     const std::array<float, 8> samples{
@@ -158,18 +156,17 @@ This represents four frames of stereo audio.
 
 ### 3. Reading audio files
 
-`SoundFileReader<T, Format, IntType>` reads samples from an existing audio file.
+`sound_file_reader<T, Format, IntType>` reads samples from an existing audio file.
 
 #### Example
 
 ```cpp
 #include <array>
 #include <iostream>
-#include <sndfile.h>
-#include <SoundFileReader.hpp>
+#include <sndfile_wrapper/sound_file_reader.hpp>
 
 int main() {
-    SoundFileReader<float, SF_FORMAT_WAV> reader(
+    sound_file_reader<float, SF_FORMAT_WAV> reader(
         "output.wav",
         16000,
         1
@@ -203,10 +200,10 @@ The `read()` method can be used repeatedly to process audio in blocks instead of
 ```cpp
 #include <array>
 #include <sndfile.h>
-#include <SoundFileReader.hpp>
+#include <sndfile_wrapper/sound_file_reader.hpp>
 
 int main() {
-    SoundFileReader<float, SF_FORMAT_WAV> reader(
+    sound_file_reader<float, SF_FORMAT_WAV> reader(
         "input.wav", 16000, 1);
 
     constexpr std::size_t block_size = 512;
@@ -248,12 +245,12 @@ sf_count_t write(const T* data, std::size_t length);
 
 Writes up to `length` sample items and returns the number written.
 
-### `SoundFileReader<T, Format, IntType>`
+### `sound_file_reader<T, Format, IntType>`
 
 Constructor:
 
 ```cpp
-SoundFileReader(
+sound_file_reader(
     const std::string filepath,
     int sample_rate,
     int channels);
