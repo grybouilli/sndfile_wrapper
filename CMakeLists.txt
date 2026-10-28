@@ -35,7 +35,10 @@ target_include_directories(${PROJECT_NAME}
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/include>
 )
 target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_14)
-
+target_link_libraries(${PROJECT_NAME}
+  INTERFACE sndfile
+  INTERFACE fftw3
+)
 if(PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_DOCS)
   find_package(Doxygen REQUIRED dot)
   if(Doxygen_FOUND)
