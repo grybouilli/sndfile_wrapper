@@ -27,7 +27,8 @@ class SoundFileReader {
 
     int frames() const& { return m_info.frames; }
     int channels() const& { return m_info.channels; }
-
+    int sample_rate() const& { return m_info.samplerate; }
+    
    private:
     SF_INFO  m_info;
     SNDFILE* m_file;
